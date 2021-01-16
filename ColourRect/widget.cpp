@@ -85,8 +85,8 @@ void Widget::initializeGL()
     m_shaderProgram.link();
 
     // 指定顶点坐标在vbo中的访问方式
-    // 参数解释：顶点坐标在shader中的参数名称，顶点坐标为float，起始偏移为0，顶点坐标类型为vec3，步幅为3个float
-    m_shaderProgram.setAttributeBuffer(0, GL_FLOAT, 0, 3, 3 * sizeof(float));
+    // 参数解释：顶点坐标在shader中的参数名称，顶点坐标为float，起始偏移为0字节，顶点坐标类型为vec3，步幅为3个float
+    m_shaderProgram.setAttributeBuffer(0, GL_FLOAT, 0 * sizeof(float), 3, 3 * sizeof(float));
     // 启用顶点属性
     m_shaderProgram.enableAttributeArray(0);
 
