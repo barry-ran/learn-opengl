@@ -49,6 +49,11 @@ void Widget::initializeGL()
     // 黑色背景
     glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
 
+    // vao初始化
+    m_vao.create();
+    // 绑定vao，下面对vbo的操作都保存到了vao上，下次绘制该物体直接m_vao.bind()即可，不用重复vbo.allocate
+    m_vao.bind();
+
     // vbo初始化
     m_vbo.create();
     m_vbo.bind();
@@ -60,13 +65,8 @@ void Widget::initializeGL()
     m_shaderProgram.addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource);
     m_shaderProgram.link();
 
-    // vao初始化
-    m_vao.create();
-
-    // 绑定vao，下面对vbo的操作都保存到了vao上，下次绘制该物体直接m_vao.bind()即可，不用重复setAttributeBuffer
-    m_vao.bind();
     // 指定顶点坐标在vbo中的访问方式
-    // 参数解释：顶点坐标在shader中的参数名称，顶点坐标为float，起始偏移为0，顶点坐标类型为vec3，步幅为3个float
+    // 参数解释：顶点坐标在shader中的参数location（例如：layout (location = 0) in vec3 aPos;），顶点坐标为float，起始偏移为0，顶点坐标类型为vec3，步幅为3个float
     m_shaderProgram.setAttributeBuffer(0, GL_FLOAT, 0, 3, 3 * sizeof(float));
     // 启用顶点属性
     m_shaderProgram.enableAttributeArray(0);
