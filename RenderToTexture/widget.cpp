@@ -7,7 +7,8 @@
 
 /*
  * 将两个图片渲染到纹理（离屏渲染），其中一个是大图片， 作为纹理大小，
- * 图片渲染到纹理以后，可以将纹理拿去上屏渲染（渲染大小为控件大小），也可以同时readpix读取混合后到纹理数据（图片混合后的原尺寸大小）
+ * 图片渲染到纹理以后，可以将纹理拿去上屏渲染（渲染大小为控件大小），渲染前可以在shader中做一些特效处理
+ * 也可以同时readpix读取混合后到纹理数据（图片混合后的原尺寸大小）
 */
 
 /***************************离屏渲染相关*****************************/
@@ -75,8 +76,8 @@ const char* screenVertexShaderSource = R"(#version 330 core
 
                                        void main()
                                        {
-                                           gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);
-                                           TexCoords = aTexCoords;
+                                       gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);
+                                       TexCoords = aTexCoords;
                                        })";
 
 const char* screenFragmentShaderSource = R"(#version 330 core
@@ -88,8 +89,15 @@ const char* screenFragmentShaderSource = R"(#version 330 core
 
                                          void main()
                                          {
-                                            //FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-                                            FragColor = texture(screenTexture, TexCoords);
+                                         //FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+                                         FragColor = texture(screenTexture, TexCoords);
+                                         // 特效处理：反相
+                                         //FragColor = vec4(vec3(1.0 - texture(screenTexture, TexCoords)), 1.0);
+
+                                         // 特效处理：灰度
+                                         //FragColor = texture(screenTexture, TexCoords);
+                                         //float average = 0.2126 * FragColor.r + 0.7152 * FragColor.g + 0.0722 * FragColor.b;
+                                         //FragColor = vec4(average, average, average, 1.0);
                                          })";
 
 Widget::Widget(QWidget *parent) :
