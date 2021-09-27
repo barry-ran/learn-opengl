@@ -127,6 +127,8 @@ bool InitEgl() {
   if (!eglMakeCurrent(g_display, g_surface, g_surface, context)) {
     return EGL_FALSE;
   }
+
+  return true;
 }
 
 void printProgramLog(GLuint f_programId) {
